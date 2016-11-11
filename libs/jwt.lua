@@ -22,12 +22,14 @@ local supportedAlgorithms = {
   HS384 = true,
   HS512 = true,
   RS256 = true,
+  RS384 = true,
+  RS512 = true,
   none = true
 }
 
 local function normalizeAlgorithm(options)
   -- Logic to try to guess and/or validate algorithm
-  assert(not (options.secret and options.key),
+  assert(not (options.secret and options.privateKey),
     "key and secret are exclusive options")
   local algorithm = options.algorithm
   if options.secret then
@@ -37,7 +39,7 @@ local function normalizeAlgorithm(options)
     assert(string.find(algorithm, "^HS"),
       "Secret is only used for HS* algorithms")
   end
-  if options.key then
+  if options.privateKey then
     if not algorithm then
       algorithm = "RS256"
     end
@@ -55,19 +57,17 @@ local function calculateSignature(message, algorithm, options)
   if algorithm == "none" then
     return ""
   elseif algorithm == "HS256" then
-    return base64Encode(
-      HMAC.hmac("sha256", message, options.secret, true)
-    )
+    return HMAC.hmac("sha256", message, options.secret, true)
   elseif algorithm == "HS384" then
-    return base64Encode(
-      HMAC.hmac("sha384", message, options.secret, true)
-    )
+    return HMAC.hmac("sha384", message, options.secret, true)
   elseif algorithm == "HS512" then
-    return base64Encode(
-      HMAC.hmac("sha512", message, options.secret, true)
-    )
+    return HMAC.hmac("sha512", message, options.secret, true)
   elseif algorithm == "RS256" then
-    error "TODO: Implement RSA signing"
+    return options.privateKey:sign(message, "sha256")
+  elseif algorithm == "RS386" then
+    return options.privateKey:sign(message, "sha386")
+  elseif algorithm == "RS512" then
+    return options.privateKey:sign(message, "sha512")
   end
 end
 
@@ -81,7 +81,7 @@ end
 -- options.noTimestamp
 -- options.header
 -- options.secret (for HS*)
--- options.key (for RS*)
+-- options.privateKey (for RS*)
 -- exp, nbf, aud and sub can also appear in payload instead
 local function sign(payload, options)
   assert(payload, "Missing payload")
@@ -126,13 +126,18 @@ local function sign(payload, options)
     "." ..
     base64Encode(jsonStringify(data))
 
-  return message .. '.' .. calculateSignature(message, algorithm, options)
+  return message .. '.' ..
+    base64Encode(calculateSignature(message, algorithm, options))
 end
 
 local function verify(token, options)
   local algorithm = normalizeAlgorithm(options)
   local message, signature = assert(
     string.match(token, "^([^.]+%.[^.]+)%.([^.]*)$"))
+  signature = base64Decode(signature)
+  if options.publicKey then
+    error "TODO: verify signature using public key"
+  end
   local expected = calculateSignature(message, algorithm, options)
   if expected ~= signature then
     return nil, "Signature validation failure"

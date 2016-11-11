@@ -6,8 +6,8 @@ JSON Web Tokens are an open, industry standard RFC 7519 method for representing
 claims securely between two parties.
 
 This library makes it easy to create and consume such tokens.  Currently only
-the `none` and `HS256` algorithms are supported, but more can be easily added
-if there is interest.  Simply file an issue with the algorithm you need.
+the `none` and `HS256` algorithms are supported, but more can be easily
+added if there is interest.  Simply file an issue with the algorithm you need.
 
 ## Install
 

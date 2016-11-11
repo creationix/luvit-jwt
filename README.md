@@ -9,6 +9,20 @@ This library makes it easy to create and consume such tokens.  Currently only
 the `none` and `HS256` algorithms are supported, but more can be easily added
 if there is interest.  Simply file an issue with the algorithm you need.
 
+## Install
+
+This is published to [lit][] as `creationix/jwt`.  You can install it directly
+in your luvit package with the following command:
+
+```sh
+lit install creationix/jwt
+```
+
+Or you can add it do your application's `package.lua` as `creationix/jwt@1` in
+the `dependencies` section.
+
+Once installed, you can use it in your app as `require 'jwt'`.
+
 ## JWT.sign(payload, options) -> token
 
 This function is used to create JWT tokens.

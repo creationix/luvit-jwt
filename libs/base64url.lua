@@ -4,6 +4,7 @@
   tags = {"crypto", "base64", "base64url", "bitop"}
   version = "2.0.0"
   license = "MIT"
+  homepage = "https://github.com/creationix/luvit-jwt/blob/master/libs/base64url.lua"
   author = { name = "Tim Caswell" }
 ]]
 

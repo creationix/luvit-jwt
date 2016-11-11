@@ -4,6 +4,7 @@
   tags = {"sso", "oauth", "jwt"}
   version = "1.0.0"
   license = "MIT"
+  homepage = "https://github.com/creationix/luvit-jwt"
   author = { name = "Tim Caswell" }
 ]]
 

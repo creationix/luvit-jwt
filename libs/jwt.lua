@@ -19,6 +19,8 @@ local base64Decode = BASE64.decode
 
 local supportedAlgorithms = {
   HS256 = true,
+  HS384 = true,
+  HS512 = true,
   RS256 = true,
   none = true
 }
@@ -55,6 +57,14 @@ local function calculateSignature(message, algorithm, options)
   elseif algorithm == "HS256" then
     return base64Encode(
       HMAC.hmac("sha256", message, options.secret, true)
+    )
+  elseif algorithm == "HS384" then
+    return base64Encode(
+      HMAC.hmac("sha384", message, options.secret, true)
+    )
+  elseif algorithm == "HS512" then
+    return base64Encode(
+      HMAC.hmac("sha512", message, options.secret, true)
     )
   elseif algorithm == "RS256" then
     error "TODO: Implement RSA signing"

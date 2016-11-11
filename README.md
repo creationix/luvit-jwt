@@ -75,3 +75,4 @@ Verify will generally not throw an error if the token is invalid in any way.
 Rather it will return `nil` followed by an error message.
 
 [JWT]: https://jwt.io/
+[lit]: https://luvit.io/lit.html#author:creationix%20name:jwt
